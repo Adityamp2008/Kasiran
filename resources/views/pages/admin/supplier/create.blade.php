@@ -22,12 +22,22 @@
                         @enderror
                     </div>
 
+                    <div class="form-group mb-3">
+                        <label for="nama_Product">Nama Product</label>
+                        <input type="text" id="nama_product" name="nama_product" 
+                               class="form-control @error('nama_product') is-invalid @enderror" 
+                               placeholder="Contoh : Aqua Mineral" value="{{ old('nama_product') }}" required>
+                        @error('nama_product')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <!-- Kontak -->
                     <div class="form-group mb-3">
                         <label for="kontak">Kontak</label>
                         <input type="text" id="kontak" name="kontak" 
                                class="form-control @error('kontak') is-invalid @enderror" 
-                               placeholder="021-123456" value="{{ old('kontak') }}">
+                               placeholder="+62-123456" value="{{ old('kontak') }}">
                         @error('kontak')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

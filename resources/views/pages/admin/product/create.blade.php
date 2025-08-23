@@ -11,13 +11,6 @@
                 <form action="{{ route('Product.store') }}" method="POST">
                     @csrf
 
-                    {{-- Nama Produk --}}
-                    <div class="form-group mb-3">
-                        <label for="nama_produk" class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control" id="nama_produk" name="nama_produk"
-                               placeholder="Contoh: Teh Botol Sosro" required>
-                    </div>
-
                     {{-- Kategori --}}
                     <div class="form-group mb-4">
                         <label for="kategori_id" class="form-label">Kategori</label>
@@ -29,7 +22,18 @@
                         </select>
                     </div>
 
-                    {{-- Harga Beli & Harga Jual (sampingan) --}}
+                    {{-- Supplier --}}
+                    <div class="form-group mb-4">
+                        <label for="supplier_id" class="form-label">Product</label>
+                        <select name="supplier_id" id="supplier_id" class="form-control" required>
+                            <option value="">-- Pilih Product --</option>
+                            @foreach($supplier as $sup)
+                                <option value="{{ $sup->id }}">{{ $sup->nama_supplier }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Harga Beli & Harga Jual --}}
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="harga_beli" class="form-label">Harga Beli</label>
@@ -43,7 +47,7 @@
                         </div>
                     </div>
 
-                    {{-- Stok Awal & Minimal Stok (sampingan) --}}
+                    {{-- Stok Awal & Minimal Stok --}}
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="stok" class="form-label">Stok Awal</label>

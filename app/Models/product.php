@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class product extends Model
 {
-    protected $table ="product";
+    protected $table = "product";
+
         protected $fillable = [
         'kategori_id',
-        'nama_produk',
+        'supplier_id',
         'harga_beli',
         'harga_jual',
         'stok',
@@ -19,5 +20,9 @@ class product extends Model
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
+    }
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
 }

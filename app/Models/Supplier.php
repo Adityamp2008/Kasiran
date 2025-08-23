@@ -12,5 +12,11 @@ class Supplier extends Model
         'nama_supplier',
         'kontak',
         'alamat',
+        'nama_product',
     ];
+
+    public function product()
+{
+    return $this->hasMany(Product::class);
+}
 }

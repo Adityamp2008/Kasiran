@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('product', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kategori_id')->constrained('Kategori')->onDelete('cascade');
-            $table->string('nama_produk');
+            $table->foreignId('kategori_id')->constrained('kategori'); 
+            $table->foreignId('supplier_id')->constrained('supplier');
             $table->decimal('harga_beli', 12, 2);
             $table->decimal('harga_jual', 12, 2);
+            $table->string('lokasi')->nullable();
             $table->integer('stok');
             $table->integer('stok_minimal');
             $table->timestamps();

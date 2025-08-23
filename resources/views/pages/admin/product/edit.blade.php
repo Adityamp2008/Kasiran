@@ -12,13 +12,6 @@
                     @csrf
                     @method('PUT')
 
-                    <!-- Nama Produk -->
-                    <div class="form-group">
-                        <label for="nama_produk">Nama Produk</label>
-                        <input type="text" class="form-control" id="nama_produk" name="nama_produk"
-                            value="{{ old('nama_produk', $Product->nama_produk) }}" required>
-                    </div>
-
                     <!-- Kategori -->
                     <div class="form-group">
                         <label for="kategori_id">Kategori</label>
@@ -28,6 +21,20 @@
                                 <option value="{{ $kat->id }}" 
                                     {{ $kat->id == $Product->kategori_id ? 'selected' : '' }}>
                                     {{ $kat->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Kategori -->
+                    <div class="form-group">
+                        <label for="kategori_id">Product</label>
+                        <select class="form-control" id="kategori_id" name="kategori_id" required>
+                            <option value="">-- Pilih Product --</option>
+                            @foreach($supplier as $kat)
+                                <option value="{{ $kat->id }}" 
+                                    {{ $kat->id == $Product->supplier_id ? 'selected' : '' }}>
+                                    {{ $kat->nama_product }}
                                 </option>
                             @endforeach
                         </select>
@@ -69,6 +76,7 @@
                         </div>
                     </div>
 
+                    <!-- Tombol -->
                     <button type="submit" class="btn btn-primary me-2">Update</button>
                     <a href="{{ route('Product.index') }}" class="btn btn-light">Batal</a>
                 </form>

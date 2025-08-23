@@ -18,6 +18,7 @@
                         <tr class="border-bottom">
                             <th class="font-weight-bold">No</th>
                             <th class="font-weight-bold">Nama Supplier</th>
+                            <th class="font-weight-bold">Nama Product</th>
                             <th class="font-weight-bold">Kontak</th>
                             <th class="font-weight-bold">Alamat</th>
                             <th class="font-weight-bold text-center">Aksi</th>
@@ -28,13 +29,13 @@
                             <tr class="border-bottom">
                                 <td class="py-3">{{ $loop->iteration }}</td>
                                 <td class="py-3">{{ $item->nama_supplier }}</td>
+                                <td class="py-3">{{ $item->nama_product }}</td>
                                 <td class="py-3">{{ $item->kontak }}</td>
                                 <td class="py-3">{{ $item->alamat }}</td>
                                 <td class="py-3 text-center">
                                     <!-- Tombol Edit -->
-                                    <a href="{{ route('Supplier.edit', $item->id) }}" 
-                                       class="btn btn-warning btn-icon-text" title="Edit">
-                                        <i class="mdi mdi-pencil-outline btn-icon-prepend"></i> Edit
+                                    <a href="{{ route('Supplier.edit', $item->id) }}" class="btn btn-warning btn-sm btn-icon-text" title="Edit">
+                                    Edit
                                     </a>           
 
                                     <!-- Tombol Hapus -->
@@ -43,10 +44,10 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" 
-                                                class="btn btn-danger btn-icon-text text-white" 
+                                                class="btn btn-danger btn-sm btn-icon-text text-white" 
                                                 onclick="return confirm('Anda yakin ingin menghapus supplier ini?')" 
                                                 title="Hapus">
-                                            <i class="mdi mdi-trash-can-outline"></i> Hapus
+                                                Hapus
                                         </button>
                                     </form>
                                 </td>

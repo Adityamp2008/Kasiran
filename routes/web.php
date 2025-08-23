@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\AdmindashboardController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\StokController;
+use App\Http\Controllers\Admin\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/',[AuthController::class, 'showLoginForm'])->name('login');
@@ -24,6 +26,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('Kategori',  KategoriController::class);
         Route::resource('Supplier',  SupplierController::class);
         Route::resource('Product',  ProductController::class);
+        Route::resource('Stok',  StokController::class);
+        Route::resource('Transaksi',  TransaksiController::class);
+        Route::get('get-product', [TransaksiController::class, 'getProduct'])->name('transaksi.getProduct');
 });
 
 require __DIR__.'/auth.php';

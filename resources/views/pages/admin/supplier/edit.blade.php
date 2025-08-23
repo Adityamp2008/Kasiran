@@ -19,6 +19,13 @@
                                class="form-control" required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="nama_product">Nama Product</label>
+                        <input type="text" id="nama_product" name="nama_product" 
+                               value="{{ old('nama_product', $Supplier->nama_product) }}" 
+                               class="form-control" required>
+                    </div>
+
                     <div class="form-group mt-3">
                         <label for="kontak">Kontak</label>
                         <input type="text" id="kontak" name="kontak" 

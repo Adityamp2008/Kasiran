@@ -34,6 +34,7 @@ class SupplierController extends Controller
             'nama_supplier' => 'required|string|max:100',
             'kontak' => 'nullable|string|max:50',
             'alamat' => 'nullable|string|max:150',
+            'nama_product' => 'nullable|string|max:150',
         ]);
 
         Supplier::create($request->all());
@@ -67,12 +68,14 @@ class SupplierController extends Controller
         'nama_supplier' => 'required|string|max:255',
         'kontak'        => 'nullable|string|max:100',
         'alamat'        => 'nullable|string',
+        'nama_product' => 'nullable|string|max:150',
     ]);
 
     $Supplier->update([
         'nama_supplier' => $request->nama_supplier,
         'kontak'        => $request->kontak,
         'alamat'        => $request->alamat,
+        'nama_product' => 'nullable|string|max:150',
     ]);
 
     return redirect()->route('Supplier.index')->with('success', 'Supplier berhasil diperbarui.');

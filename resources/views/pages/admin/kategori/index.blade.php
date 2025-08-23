@@ -49,8 +49,7 @@
                                     <td class="py-3"><span class="font-weight-light">{{ $item->slug }}</span></td>
                                     <td class="py-3 text-center">
                                         <!-- Tombol Edit -->
-                                        <a href="{{ route('Kategori.edit', $item->id) }}" type="button" class="btn btn-warning btn-icon-text" title="Edit">
-                                                <i class="mdi mdi-pencil-outline btn-icon-prepend"></i>
+                                        <a href="{{ route('Kategori.edit', $item->id) }}" type="button" class="btn btn-warning btn-sm btn-icon-text" title="Edit">
                                                 Edit
                                             </a>           
                                         
@@ -58,8 +57,7 @@
                                         <form action="{{ route('Kategori.destroy', $item->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-icon-tex text-white" onclick="return confirm('Anda yakin ingin menghapus kategori ini?')" title="Hapus">
-                                                <i class="mdi mdi-trash-can-outline"></i>
+                                            <button type="submit" class="btn btn-danger btn-sm btn-icon-tex text-white" onclick="return confirm('Anda yakin ingin menghapus kategori ini?')" title="Hapus">
                                                 Hapus
                                             </button>
                                         </form>
