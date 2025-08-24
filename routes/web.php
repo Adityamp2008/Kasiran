@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\StokController;
 use App\Http\Controllers\Admin\TransaksiController;
+use App\Http\Controllers\Admin\kelolaTransaksiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/',[AuthController::class, 'showLoginForm'])->name('login');
@@ -28,7 +29,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('Product',  ProductController::class);
         Route::resource('Stok',  StokController::class);
         Route::resource('Transaksi',  TransaksiController::class);
-        Route::get('get-product', [TransaksiController::class, 'getProduct'])->name('transaksi.getProduct');
+        Route::get('kelolaTransaksi', [kelolaTransaksiController::class, 'index'])->name('kelolaTransaksi.index');
+        Route::get('kelolaTransaksi/print/{id}', [kelolaTransaksiController::class, 'print'])->name('kelolaTransaksi.print');
 });
 
 require __DIR__.'/auth.php';

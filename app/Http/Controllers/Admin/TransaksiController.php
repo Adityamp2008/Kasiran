@@ -31,9 +31,12 @@ class TransaksiController extends Controller
         DB::transaction(function () use ($request) {
             $product = Product::findOrFail($request->product_id);
 
-            if ($product->stok < $request->jumlah) {
-                abort(400, 'Stok tidak mencukupi.');
-            }
+    if ($product->stok < $request->jumlah) {
+        return redirect()->back()
+            ->withErrors(['jumlah' => '⚠️ Stok tidak mencukupi. Stok tersedia: ' . $product->stok])
+            ->withInput();
+    }
+
 
             $product->decrement('stok', $request->jumlah);
 
