@@ -34,23 +34,26 @@
         </button>
 
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item nav-profile dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-bs-toggle="dropdown">
-              <img src="{{ asset('frontend/assets/images/faces/face28.jpg') }}" alt="profile" />
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" href="#">
-                <i class="fa-solid fa-gear text-primary"></i> Settings
+            <li class="nav-item nav-profile dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="d-none d-md-inline fw-bold">
+                  Halo, {{ Auth::user()->name ?? 'Admin' }}
+                </span>
               </a>
-              {{-- Logout --}}
-              <form action="{{ route('logout') }}" method="POST" class="dropdown-item p-0">
-                @csrf
-                <button type="submit" class="btn w-100 text-start bg-transparent border-0">
-                  <i class="fa-solid fa-right-from-bracket text-primary"></i> Logout
-                </button>
-              </form>
-            </div>
-          </li>
+
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item" href="{{ route('setting.index')}}">
+                  <i class="fa-solid fa-gear text-primary me-2"></i> Settings
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="dropdown-item p-0">
+                  @csrf
+                  <button type="submit" class="btn w-100 text-start bg-transparent border-0">
+                    <i class="fa-solid fa-right-from-bracket text-primary me-2"></i> Logout
+                  </button>
+                </form>
+              </div>
+            </li>
+
         </ul>
 
         {{-- Offcanvas toggle --}}

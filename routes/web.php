@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\StokController;
 use App\Http\Controllers\Admin\TransaksiController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\kelolaTransaksiController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('Transaksi',  TransaksiController::class);
         Route::get('kelolaTransaksi', [kelolaTransaksiController::class, 'index'])->name('kelolaTransaksi.index');
         Route::get('kelolaTransaksi/print/{id}', [kelolaTransaksiController::class, 'print'])->name('kelolaTransaksi.print');
+
+        //setting boz
+        Route::get('/Setting', [SettingController::class, 'index'])->name('setting.index');
+        Route::put('/setting/password', [SettingController::class, 'updatePassword'])->name('setting.updatePassword');
 });
 
 require __DIR__.'/auth.php';
