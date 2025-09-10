@@ -55,19 +55,34 @@ class StokController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'stok' => 'required|integer|min:0',
-            'lokasi' => 'nullable|string|max:255',
-        ]);
+{
+    $request->validate([
+        'penyesuaian' => 'required|in:tambah,kurang',
+        'jumlah' => 'required|integer|min:1',
+        'lokasi' => 'nullable|string|max:255',
+    ]);
 
-        $product = Product::findOrFail($id);
-        $product->stok = $request->stok;
-        $product->lokasi = $request->lokasi;
-        $product->save();
+    $product = Product::findOrFail($id);
 
-        return redirect()->route('Stok.index')->with('success', 'Stok berhasil diperbarui!');
+    // Proses penyesuaian stok
+    if ($request->penyesuaian === 'tambah') {
+        $product->stok += $request->jumlah;
+    } elseif ($request->penyesuaian === 'kurang') {
+        $product->stok -= $request->jumlah;
+        if ($product->stok < 0) {
+            $product->stok = 0; // biar stok nggak minus
+        }
     }
+
+    // Update lokasi (kalau ada input)
+    if ($request->has('lokasi')) {
+        $product->lokasi = $request->lokasi;
+    }
+
+    $product->save();
+
+    return redirect()->route('Stok.index')->with('success', 'Stok berhasil disesuaikan!');
+}
 
     /**
      * Remove the specified resource from storage.

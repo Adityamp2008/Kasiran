@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('product')->onDelete('cascade');
-            $table->integer('jumlah');
-            $table->decimal('total', 12, 2);
+            $table->string('kode_transaksi')->unique();
+            $table->decimal('total', 12, 2)->default(0);
+            $table->foreignId('diskon_id')->nullable()->constrained('diskon')->nullOnDelete();
             $table->timestamps();
         });
     }

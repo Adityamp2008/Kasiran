@@ -2,41 +2,39 @@
 @section('title', 'Edit Kategori')
 
 @section('content')
-<div class="row">
-  <div class="col-12 grid-margin">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title mb-4">Edit Kategori</h4>
+<div class="flex justify-center mt-6">
 
-        <form action="{{ route('Kategori.update', $kategori->id) }}" method="POST" class="mt-3">
-          @csrf
-          @method('PUT')
+  <div class="w-full max-w-md bg-white shadow rounded-lg p-6">
+    <h2 class="text-xl font-bold text-blue-600 mb-4">Edit Kategori</h2>
 
-          <div class="form-group mb-3">
-            <label for="namaKategori" class="form-label">Nama Kategori</label>
-            <input 
-              type="text" 
-              id="namaKategori" 
-              name="nama"
-              value="{{ old('nama', $kategori->nama) }}"
-              class="form-control" 
-              placeholder="Contoh: Minuman Dingin" 
-              required
-            >
-          </div>
+    <form action="{{ route('Kategori.update', $kategori->id) }}" method="POST" class="space-y-4">
+      @csrf
+      @method('PUT')
 
-          <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary btn-icon-text">
-              <i class="fa-solid fa-rotate me-2"></i> Update
-            </button>
-            <a href="{{ route('Kategori.index') }}" class="btn btn-light btn-icon-text">
-              <i class="fa-solid fa-xmark me-2"></i> Batal
-            </a>
-          </div>
-        </form>
-
+      <div class="flex flex-col">
+        <label for="namaKategori" class="text-sm font-medium text-gray-700 mb-1">Nama Kategori</label>
+        <input 
+          type="text" 
+          id="namaKategori" 
+          name="nama"
+          value="{{ old('nama', $kategori->nama) }}"
+          placeholder="Contoh: Minuman Dingin" 
+          required
+          class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
       </div>
-    </div>
+
+      <div class="flex gap-3">
+        <button type="submit" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition flex justify-center items-center">
+          <i class="fa-solid fa-rotate me-2"></i> Update
+        </button>
+        <a href="{{ route('Kategori.index') }}" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition flex justify-center items-center">
+          <i class="fa-solid fa-xmark me-2"></i> Batal
+        </a>
+      </div>
+
+    </form>
   </div>
+
 </div>
 @endsection

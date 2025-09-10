@@ -1,157 +1,120 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config('app.name') }} | @yield('title', 'Kasiran') </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  </head>
+  <body class="bg-gray-100 text-gray-800 flex">
 
-  <title>{{ config('app.name') }} | @yield('title', 'Kasiran')</title>
-
-  {{-- Vendor CSS --}}
-  <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/css/vendor.bundle.base.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/assets/js/select.dataTables.min.css') }}">
-
-  {{-- Font Awesome 6 --}}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
-  {{-- Custom CSS --}}
-  <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
-  <link rel="shortcut icon" href="{{ asset('frontend/assets/images/favicon.png') }}" />
-</head>
-<body>
-  <div class="container-scroller">
-
-    {{-- Navbar --}}
-    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <h2 class="m-3 text-primary fw-bold">{{ env('APP_NAME') }}</h2>
-      </div>
-
-      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-        {{-- Toggle sidebar --}}
-        <button class="navbar-toggler align-self-center" type="button" data-toggle="minimize">
-          <span class="fa-solid fa-bars"></span>
-        </button>
-
-        <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item nav-profile dropdown">
-              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="d-none d-md-inline fw-bold">
-                  Halo, {{ Auth::user()->name ?? 'Admin' }}
-                </span>
-              </a>
-
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item" href="{{ route('setting.index')}}">
-                  <i class="fa-solid fa-gear text-primary me-2"></i> Settings
-                </a>
-                <form action="{{ route('logout') }}" method="POST" class="dropdown-item p-0">
-                  @csrf
-                  <button type="submit" class="btn w-100 text-start bg-transparent border-0">
-                    <i class="fa-solid fa-right-from-bracket text-primary me-2"></i> Logout
-                  </button>
-                </form>
-              </div>
-            </li>
-
-        </ul>
-
-        {{-- Offcanvas toggle --}}
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-          <span class="fa-solid fa-bars"></span>
-        </button>
-      </div>
-    </nav>
-
-    <div class="container-fluid page-body-wrapper">
-
-      {{-- Sidebar --}}
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.dashboard') }}">
-              <i class="fa-solid fa-gauge-high menu-icon"></i>
-              <span class="menu-title">Dashboard</span>
+    {{-- Sidebar --}}
+    <aside class="w-64 bg-gray-900 text-gray-100 h-screen flex flex-col">
+      <div class="p-6 text-center text-2xl font-bold text-blue-400">{{ env('APP_NAME') }}</div>
+      <nav class="flex-1 px-4">
+        <ul class="space-y-2">
+          <li>
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center p-2 rounded hover:bg-gray-800 transition">
+              <i class="fa-solid fa-gauge-high w-6"></i>
+              <span class="ml-2">Dashboard</span>
             </a>
           </li>
-
-          <li class="nav-item {{ request()->routeIs('Kategori.*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('Kategori.index') }}">
-              <i class="fa-solid fa-tags menu-icon"></i>
-              <span class="menu-title">Kategori</span>
+          <li>
+            <a href="{{ route('Kategori.index') }}" class="flex items-center p-2 rounded hover:bg-gray-800 transition">
+              <i class="fa-solid fa-tags w-6"></i>
+              <span class="ml-2">Kategori</span>
             </a>
           </li>
-
-          <li class="nav-item {{ request()->routeIs('Supplier.*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('Supplier.index') }}">
-              <i class="fa-solid fa-truck-field menu-icon"></i>
-              <span class="menu-title">Supplier</span>
+          <li>
+            <a href="{{ route('Supplier.index') }}" class="flex items-center p-2 rounded hover:bg-gray-800 transition">
+              <i class="fa-solid fa-truck-field w-6"></i>
+              <span class="ml-2">Supplier</span>
             </a>
           </li>
-
-          <li class="nav-item {{ request()->routeIs('Product.*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('Product.index') }}">
-              <i class="fa-solid fa-box-open menu-icon"></i>
-              <span class="menu-title">Product</span>
+          <li>
+            <a href="{{ route('Product.index') }}" class="flex items-center p-2 rounded hover:bg-gray-800 transition">
+              <i class="fa-solid fa-box-open w-6"></i>
+              <span class="ml-2">Product</span>
             </a>
           </li>
-
-          <li class="nav-item {{ request()->routeIs('Stok.*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('Stok.index') }}">
-              <i class="fa-solid fa-database menu-icon"></i>
-              <span class="menu-title">Kelola Stok</span>
+          <li>
+            <a href="{{ route('Stok.index') }}" class="flex items-center p-2 rounded hover:bg-gray-800 transition">
+              <i class="fa-solid fa-database w-6"></i>
+              <span class="ml-2">Kelola Stok</span>
             </a>
           </li>
-
-          <li class="nav-item {{ request()->routeIs('Transaksi.*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('Transaksi.index') }}">
-              <i class="fa-solid fa-credit-card menu-icon"></i>
-              <span class="menu-title">Transaksi</span>
+          <li>
+            <a href="{{ route('Transaksi.index') }}" class="flex items-center p-2 rounded hover:bg-gray-800 transition">
+              <i class="fa-solid fa-credit-card w-6"></i>
+              <span class="ml-2">Transaksi</span>
             </a>
           </li>
-
-          <li class="nav-item {{ request()->routeIs('kelolaTransaksi.*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('kelolaTransaksi.index') }}">
-              <i class="fas fa-receipt menu-icon"></i>
-              <span class="menu-title">Kelola Transaksi</span>
+          <li>
+            <a href="{{ route('Diskon.index') }}" class="flex items-center p-2 rounded hover:bg-gray-800 transition">
+              <i class="fa-solid fa-percent w-6"></i>
+              <span class="ml-2">Diskon</span>
             </a>
           </li>
         </ul>
       </nav>
+    </aside>
 
-      {{-- Main Panel --}}
-      <div class="main-panel">
-        <div class="content-wrapper">
-          @yield('content')
+    {{-- Main Content --}}
+    <div class="flex-1 flex flex-col min-h-screen">
+      {{-- Navbar --}}
+      <header class="bg-white shadow p-4 flex justify-between items-center">
+        <div>
+          <button id="sidebarToggle" class="text-gray-700 md:hidden">
+            <i class="fa-solid fa-bars"></i>
+          </button>
         </div>
-
-        {{-- Footer --}}
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
-              Copyright © 2025. Premium
-            </span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
-              Hand-crafted & made with <i class="fa-solid fa-heart text-danger ms-1"></i>
-            </span>
+        <div class="flex items-center space-x-4">
+          <span class="hidden md:inline font-semibold">Halo, {{ Auth::user()->name ?? 'Admin' }}</span>
+          <div class="relative">
+            <button id="profileDropdownBtn" class="p-2 rounded hover:bg-gray-200 transition">
+              <i class="fa-solid fa-user"></i>
+            </button>
+            <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white border rounded shadow">
+              <a href="{{ route('setting.index') }}" class="flex items-center p-2 hover:bg-gray-100">
+                <i class="fa-solid fa-gear w-4 mr-2 text-blue-600"></i> Settings
+              </a>
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="flex items-center w-full p-2 hover:bg-gray-100 text-left">
+                  <i class="fa-solid fa-right-from-bracket w-4 mr-2 text-red-600"></i> Logout
+                </button>
+              </form>
+            </div>
           </div>
-        </footer>
-      </div>
-    </div>
-  </div>
+        </div>
+      </header>
 
-  {{-- Scripts --}}
-  <script src="{{ asset('frontend/assets/vendors/js/vendor.bundle.base.js') }}"></script>
-  <script src="{{ asset('frontend/assets/vendors/chart.js/chart.umd.js') }}"></script>
-  <script src="{{ asset('frontend/assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
-  <script src="{{ asset('frontend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
-  <script src="{{ asset('frontend/assets/js/dataTables.select.min.js') }}"></script>
-  <script src="{{ asset('frontend/assets/js/off-canvas.js') }}"></script>
-  <script src="{{ asset('frontend/assets/js/template.js') }}"></script>
-  <script src="{{ asset('frontend/assets/js/settings.js') }}"></script>
-  <script src="{{ asset('frontend/assets/js/todolist.js') }}"></script>
-  <script src="{{ asset('frontend/assets/js/jquery.cookie.js') }}" type="text/javascript"></script>
-  <script src="{{ asset('frontend/assets/js/dashboard.js') }}"></script>
-  @stack('scripts')
-</body>
-</html>
+      {{-- Content --}}
+      <main class="flex-1 p-2">
+        @yield('content')
+      </main>
+
+      {{-- Footer --}}
+      <footer class="bg-white p-4 shadow text-center text-gray-500">
+        &copy; 2025. Premium
+      </footer>
+    </div>
+
+    {{-- JS Interaksi --}}
+    <script>
+      const dropdownBtn = document.getElementById('profileDropdownBtn');
+      const dropdown = document.getElementById('profileDropdown');
+      dropdownBtn.addEventListener('click', () => {
+        dropdown.classList.toggle('hidden');
+      });
+
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.querySelector('aside');
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+      });
+    </script>
+
+  </body>
+  </html>

@@ -2,86 +2,80 @@
 @section('title', 'Edit Produk')
 
 @section('content')
-<div class="row">
-    <div class="col-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Edit Produk</h4>
+<div class="mt-4 px-2">
 
-                <form action="{{ route('Product.update', $Product->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
+  <div class="w-full bg-white shadow rounded-lg p-4 space-y-2">
 
-                    <!-- Kategori -->
-                    <div class="form-group">
-                        <label for="kategori_id">Kategori</label>
-                        <select class="form-control" id="kategori_id" name="kategori_id" required>
-                            <option value="">-- Pilih Kategori --</option>
-                            @foreach($kategori as $kat)
-                                <option value="{{ $kat->id }}" 
-                                    {{ $kat->id == $Product->kategori_id ? 'selected' : '' }}>
-                                    {{ $kat->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+    <h2 class="text-lg font-bold text-blue-600 mb-2 text-center">Form Edit Produk</h2>
 
-                    <!-- Kategori -->
-                    <div class="form-group">
-                        <label for="kategori_id">Product</label>
-                        <select class="form-control" id="kategori_id" name="kategori_id" required>
-                            <option value="">-- Pilih Product --</option>
-                            @foreach($supplier as $kat)
-                                <option value="{{ $kat->id }}" 
-                                    {{ $kat->id == $Product->supplier_id ? 'selected' : '' }}>
-                                    {{ $kat->nama_product }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+    <form action="{{ route('Product.update', $Product->id) }}" method="POST" class="space-y-2">
+      @csrf
+      @method('PUT')
 
-                    <!-- Harga Beli & Harga Jual -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="harga_beli">Harga Beli</label>
-                                <input type="number" class="form-control" id="harga_beli" name="harga_beli"
-                                    value="{{ old('harga_beli', $Product->harga_beli) }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="harga_jual">Harga Jual</label>
-                                <input type="number" class="form-control" id="harga_jual" name="harga_jual"
-                                    value="{{ old('harga_jual', $Product->harga_jual) }}" required>
-                            </div>
-                        </div>
-                    </div>
+      {{-- Kategori --}}
+      <div class="flex flex-col">
+        <label for="kategori_id" class="text-sm font-medium text-gray-700">Kategori</label>
+        <select name="kategori_id" id="kategori_id" required
+                class="border border-gray-300 rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm">
+          <option value="">-- Pilih Kategori --</option>
+          @foreach($kategori as $kat)
+            <option value="{{ $kat->id }}" {{ $kat->id == $Product->kategori_id ? 'selected' : '' }}>{{ $kat->nama }}</option>
+          @endforeach
+        </select>
+      </div>
 
-                    <!-- Stok & Minimal Stok -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stok">Stok Awal</label>
-                                <input type="number" class="form-control" id="stok" name="stok"
-                                    value="{{ old('stok', $Product->stok) }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stok_minimal">Minimal Stok</label>
-                                <input type="number" class="form-control" id="stok_minimal" name="stok_minimal"
-                                    value="{{ old('stok_minimal', $Product->stok_minimal) }}" required>
-                            </div>
-                        </div>
-                    </div>
+      {{-- Supplier --}}
+      <div class="flex flex-col">
+        <label for="supplier_id" class="text-sm font-medium text-gray-700">Supplier</label>
+        <select name="supplier_id" id="supplier_id" required
+                class="border border-gray-300 rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm">
+          <option value="">-- Pilih Supplier --</option>
+          @foreach($supplier as $sup)
+            <option value="{{ $sup->id }}" {{ $sup->id == $Product->supplier_id ? 'selected' : '' }}>{{ $sup->nama_supplier }}</option>
+          @endforeach
+        </select>
+      </div>
 
-                    <!-- Tombol -->
-                    <button type="submit" class="btn btn-primary me-2">Update</button>
-                    <a href="{{ route('Product.index') }}" class="btn btn-light">Batal</a>
-                </form>
-            </div>
+      {{-- Harga Beli & Harga Jual --}}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div class="flex flex-col">
+          <label for="harga_beli" class="text-sm font-medium text-gray-700">Harga Beli</label>
+          <input type="number" name="harga_beli" id="harga_beli" value="{{ old('harga_beli', $Product->harga_beli) }}" required
+                 class="border border-gray-300 rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm">
         </div>
-    </div>
+        <div class="flex flex-col">
+          <label for="harga_jual" class="text-sm font-medium text-gray-700">Harga Jual</label>
+          <input type="number" name="harga_jual" id="harga_jual" value="{{ old('harga_jual', $Product->harga_jual) }}" required
+                 class="border border-gray-300 rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm">
+        </div>
+      </div>
+
+      {{-- Stok & Minimal Stok --}}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div class="flex flex-col">
+          <label for="stok" class="text-sm font-medium text-gray-700">Stok Awal</label>
+          <input type="number" name="stok" id="stok" value="{{ old('stok', $Product->stok) }}" required
+                 class="border border-gray-300 rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm">
+        </div>
+        <div class="flex flex-col">
+          <label for="stok_minimal" class="text-sm font-medium text-gray-700">Minimal Stok</label>
+          <input type="number" name="stok_minimal" id="stok_minimal" value="{{ old('stok_minimal', $Product->stok_minimal) }}" required
+                 class="border border-gray-300 rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm">
+        </div>
+      </div>
+
+      {{-- Tombol --}}
+      <div class="flex justify-between mt-2">
+        <a href="{{ route('Product.index') }}" class="bg-gray-200 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-300 transition text-sm flex items-center">
+          <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+        </a>
+        <button type="submit" class="bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition text-sm flex items-center">
+          <i class="fa-solid fa-save me-1"></i> Update Produk
+        </button>
+      </div>
+
+    </form>
+
+  </div>
 </div>
 @endsection

@@ -8,34 +8,40 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\StokController;
 use App\Http\Controllers\Admin\TransaksiController;
+use App\Http\Controllers\Admin\DiskonController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\kelolaTransaksiController;
+use App\Http\Controllers\Admin\KelolaTransaksiController;
+use App\Http\Controllers\Admin\TransaksiDetailController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/',[AuthController::class, 'showLoginForm'])->name('login');
- 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 
-//bagian login
+// bagian login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-        Route::resource('Kategori',  KategoriController::class);
-        Route::resource('Supplier',  SupplierController::class);
-        Route::resource('Product',  ProductController::class);
-        Route::resource('Stok',  StokController::class);
-        Route::resource('Transaksi',  TransaksiController::class);
-        Route::get('kelolaTransaksi', [kelolaTransaksiController::class, 'index'])->name('kelolaTransaksi.index');
-        Route::get('kelolaTransaksi/print/{id}', [kelolaTransaksiController::class, 'print'])->name('kelolaTransaksi.print');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
-        //setting boz
-        Route::get('/Setting', [SettingController::class, 'index'])->name('setting.index');
-        Route::put('/setting/password', [SettingController::class, 'updatePassword'])->name('setting.updatePassword');
+    Route::resource('Kategori',   KategoriController::class);
+    Route::resource('Supplier',   SupplierController::class);
+    Route::resource('Product',    ProductController::class);
+    Route::resource('Stok',       StokController::class);
+    Route::resource('Transaksi',  TransaksiController::class);
+    Route::resource('Diskon',     DiskonController::class);
+
+    // transaksi print
+    Route::get('/transaksi/print/{id}', [TransaksiController::class, 'print'])->name('Transaksi.print');
+
+    // setting
+    Route::get('/Setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::put('/setting/password', [SettingController::class, 'updatePassword'])->name('setting.updatePassword');
+
+    // diskon aktif
+    Route::get('diskon-aktif', [DiskonController::class, 'aktif'])->name('diskon.aktif');
+
+
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
