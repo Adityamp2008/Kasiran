@@ -2,92 +2,104 @@
 @section('title', 'Edit Diskon')
 
 @section('content')
-<div class="row">
-    <div class="col-lg-8 col-12 mx-auto">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Edit Diskon</h4>
+<div class="mt-6 max-w-4xl mx-auto px-4">
 
-                <form action="{{ route('Diskon.update', $diskon->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
+  <h2 class="text-2xl font-bold text-blue-600 mb-4 flex items-center">
+    <i class="fa-solid fa-percent me-2"></i> Edit Diskon
+  </h2>
 
-                    <div class="mb-3">
-                        <label class="form-label">Nama Diskon</label>
-                        <input type="text" name="nama_diskon"
-                            class="form-control @error('nama_diskon') is-invalid @enderror"
-                            value="{{ old('nama_diskon', $diskon->nama_diskon) }}" required>
-                        @error('nama_diskon')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+  <form action="{{ route('Diskon.update', $diskon->id) }}" method="POST" class="space-y-4 bg-white p-4 rounded-xl shadow-sm">
+    @csrf
+    @method('PUT')
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Tipe Diskon</label>
-                            <select name="tipe" class="form-select @error('tipe') is-invalid @enderror" required>
-                                <option value="potongan" {{ old('tipe', $diskon->tipe) == 'potongan' ? 'selected' : '' }}>Potongan</option>
-                                <option value="persen" {{ old('tipe', $diskon->tipe) == 'persen' ? 'selected' : '' }}>Persen</option>
-                            </select>
-                            @error('tipe')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nilai Diskon</label>
-                            <input type="number" name="nilai"
-                                class="form-control @error('nilai') is-invalid @enderror"
-                                value="{{ old('nilai', $diskon->nilai) }}" required>
-                            @error('nilai')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <small class="text-muted">Isi dengan angka (contoh: 10000 untuk potongan atau 10 untuk persen).</small>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Minimal Pembelian (Rp)</label>
-                            <input type="number" name="min_belanja"
-                                class="form-control @error('min_belanja') is-invalid @enderror"
-                                value="{{ old('min_belanja', $diskon->min_belanja) }}">
-                            @error('min_belanja')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Minimal Jumlah Barang</label>
-                            <input type="number" name="min_qty"
-                                class="form-control @error('min_qty') is-invalid @enderror"
-                                value="{{ old('min_qty', $diskon->min_qty) }}">
-                            @error('min_qty')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-select @error('status') is-invalid @enderror" required>
-                            <option value="1" {{ old('status', $diskon->status) == 1 ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ old('status', $diskon->status) == 0 ? 'selected' : '' }}>Nonaktif</option>
-                        </select>
-                        @error('status')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ route('Diskon.index') }}" class="btn btn-secondary">
-                            <i class="mdi mdi-arrow-left"></i> Kembali
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="mdi mdi-content-save"></i> Simpan Perubahan
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+    {{-- Nama Diskon --}}
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Nama Diskon</label>
+      <input type="text" name="nama_diskon" required
+             value="{{ old('nama_diskon', $diskon->nama_diskon) }}"
+             class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 @error('nama_diskon') border-red-500 @enderror">
+      @error('nama_diskon')
+        <span class="text-red-500 text-xs">{{ $message }}</span>
+      @enderror
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {{-- Tipe Diskon --}}
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Diskon</label>
+        <select name="tipe" required
+                class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 @error('tipe') border-red-500 @enderror">
+          <option value="potongan" {{ old('tipe', $diskon->tipe)=='potongan'?'selected':'' }}>Potongan</option>
+          <option value="persen" {{ old('tipe', $diskon->tipe)=='persen'?'selected':'' }}>Persen</option>
+        </select>
+        @error('tipe')
+          <span class="text-red-500 text-xs">{{ $message }}</span>
+        @enderror
+      </div>
+
+      {{-- Nilai Diskon --}}
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Nilai Diskon</label>
+        <input type="number" name="nilai" required
+               value="{{ old('nilai', $diskon->nilai) }}"
+               class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 @error('nilai') border-red-500 @enderror">
+        <small class="text-gray-500 text-xs">Contoh: 10000 untuk potongan atau 10 untuk persen</small>
+        @error('nilai')
+          <span class="text-red-500 text-xs">{{ $message }}</span>
+        @enderror
+      </div>
+
+      {{-- Minimal Pembelian --}}
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Minimal Pembelian (Rp)</label>
+        <input type="number" name="min_belanja"
+               value="{{ old('min_belanja', $diskon->min_belanja) }}"
+               class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 @error('min_belanja') border-red-500 @enderror">
+        @error('min_belanja')
+          <span class="text-red-500 text-xs">{{ $message }}</span>
+        @enderror
+      </div>
+
+      {{-- Minimal Qty --}}
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Minimal Jumlah Barang</label>
+        <input type="number" name="min_qty"
+               value="{{ old('min_qty', $diskon->min_qty) }}"
+               class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 @error('min_qty') border-red-500 @enderror">
+        @error('min_qty')
+          <span class="text-red-500 text-xs">{{ $message }}</span>
+        @enderror
+      </div>
+    </div>
+
+    {{-- Status Aktif/Nonaktif --}}
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+      <div class="flex gap-3">
+        <label class="inline-flex items-center cursor-pointer">
+          <input type="radio" name="status" value="1" {{ old('status', $diskon->status)==1?'checked':'' }}>
+          <span class="ml-2 text-sm">Aktif</span>
+        </label>
+        <label class="inline-flex items-center cursor-pointer">
+          <input type="radio" name="status" value="0" {{ old('status', $diskon->status)==0?'checked':'' }}>
+          <span class="ml-2 text-sm">Nonaktif</span>
+        </label>
+      </div>
+      @error('status')
+        <span class="text-red-500 text-xs">{{ $message }}</span>
+      @enderror
+    </div>
+
+    {{-- Tombol --}}
+    <div class="flex justify-end gap-3 pt-2">
+      <a href="{{ route('Diskon.index') }}" class="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-300 transition text-sm">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+      </a>
+      <button type="submit" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition text-sm">
+        <i class="fa-solid fa-save me-1"></i> Simpan Perubahan
+      </button>
+    </div>
+
+  </form>
 </div>
 @endsection

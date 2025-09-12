@@ -95,4 +95,13 @@ class DiskonController extends Controller
     {
         return Diskon::where('status', 1)->orderByDesc('nilai')->get();
     }
+
+    public function toggleStatus($id)
+{
+    $diskon = Diskon::findOrFail($id);
+    $diskon->status = !$diskon->status; // balik status
+    $diskon->save();
+
+    return redirect()->back()->with('success', 'Status diskon berhasil diperbarui.');
+}
 }

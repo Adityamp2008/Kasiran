@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
 
     // diskon aktif
     Route::get('diskon-aktif', [DiskonController::class, 'aktif'])->name('diskon.aktif');
+    Route::patch('/diskon/{diskon}/toggle', [DiskonController::class, 'toggleStatus'])->name('Diskon.toggle');
+
 
 
 });

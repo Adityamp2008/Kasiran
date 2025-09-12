@@ -1,5 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Transaksi Multi-Item')
+
+@section('title', 'Buat Transaksi')
 
 @section('content')
 <div class="max-w-screen-lg mx-auto px-3 sm:px-6 py-6">
@@ -11,17 +12,15 @@
         <form action="{{ route('Transaksi.store') }}" method="POST" id="form-transaksi" class="space-y-4">
             @csrf
 
+            {{-- Wrapper Produk --}}
             <div id="produk-wrapper" class="space-y-3">
-                {{-- ITEM TEMPLATE --}}
                 <div class="produk-item grid grid-cols-1 sm:grid-cols-5 gap-3 bg-gray-50 p-4 rounded-lg border relative">
-                    {{-- Produk --}}
+                    {{-- Pilih Produk --}}
                     <select name="product_id[]" class="product-select border rounded-lg text-sm p-2" required>
                         <option value="">-- Pilih Produk --</option>
                         @foreach($product as $p)
                             @if($p->supplier)
-                                <option value="{{ $p->id }}" 
-                                        data-harga="{{ $p->harga_jual }}" 
-                                        data-stok="{{ $p->stok }}">
+                                <option value="{{ $p->id }}" data-harga="{{ $p->harga_jual }}" data-stok="{{ $p->stok }}">
                                     {{ $p->supplier->nama_product }}
                                 </option>
                             @endif
@@ -48,15 +47,17 @@
             <div class="text-lg font-semibold text-gray-800">
                 Grand Total: <span id="grand-total" class="text-blue-600">Rp 0</span>
             </div>
-
-            {{-- Hidden input untuk kirim grand total ke backend --}}
             <input type="hidden" name="grand_total" id="grand_total_input" value="0">
 
+            {{-- Buttons --}}
             <div class="flex gap-3">
+                <button type="button" onclick="window.location='{{ route('Transaksi.index') }}'" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
                 <button type="button" id="add-produk" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                     <i class="fas fa-plus"></i> Tambah Produk
                 </button>
-                <button type="submit" id="btn-submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
                     <i class="fas fa-save"></i> Simpan Transaksi
                 </button>
             </div>
@@ -65,67 +66,56 @@
 </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const wrapper = document.getElementById('produk-wrapper');
-    const grandTotalEl = document.getElementById('grand-total');
+    const addBtn = document.getElementById('add-produk');
+    const grandTotalSpan = document.getElementById('grand-total');
     const grandTotalInput = document.getElementById('grand_total_input');
-    const btnSubmit = document.getElementById('btn-submit');
-    const firstItem = wrapper.querySelector('.produk-item');
 
-    function formatRupiah(n) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(n);
+    function formatRupiah(angka) {
+        return `Rp ${angka.toLocaleString()}`;
     }
 
-    function hitungTotal() {
-        let total = 0;
-        let adaProduk = false;
+    function updateTotals() {
+        let grandTotal = 0;
 
         wrapper.querySelectorAll('.produk-item').forEach(item => {
             const select = item.querySelector('.product-select');
-            const harga = parseFloat(select.selectedOptions[0]?.dataset.harga || 0);
-            const jumlah = parseInt(item.querySelector('.jumlah').value || 0);
-            const subtotal = harga * jumlah;
+            const jumlah = item.querySelector('.jumlah');
+            const hargaInput = item.querySelector('.harga');
+            const subtotalInput = item.querySelector('.subtotal');
 
-            if (select.value) adaProduk = true;
+            const selectedOption = select.selectedOptions[0];
+            const harga = selectedOption && selectedOption.dataset.harga 
+                            ? parseInt(selectedOption.dataset.harga) 
+                            : 0;
+            const qty = jumlah.value ? parseInt(jumlah.value) : 0;
+            const subtotal = harga * qty;
 
-            item.querySelector('.harga').value = harga ? formatRupiah(harga) : '';
-            item.querySelector('.subtotal').value = subtotal ? formatRupiah(subtotal) : '';
-
-            total += subtotal;
+            hargaInput.value = harga ? formatRupiah(harga) : '';
+            subtotalInput.value = subtotal ? formatRupiah(subtotal) : '';
+            grandTotal += subtotal;
         });
 
-        grandTotalEl.innerText = formatRupiah(total);
-        grandTotalInput.value = total;
-        btnSubmit.disabled = !adaProduk; // disable submit jika belum ada produk dipilih
+        grandTotalSpan.textContent = formatRupiah(grandTotal || 0);
+        grandTotalInput.value = grandTotal || 0;
     }
 
-    function initItem(item) {
-        const select = item.querySelector('.product-select');
-        const jumlah = item.querySelector('.jumlah');
-        const btnRemove = item.querySelector('.btn-remove');
-
-        select.onchange = null;
-        jumlah.oninput = null;
-        btnRemove.onclick = null;
-
-        select.addEventListener('change', hitungTotal);
-        jumlah.addEventListener('input', hitungTotal);
-        btnRemove.addEventListener('click', () => {
-            if (wrapper.querySelectorAll('.produk-item').length > 1) {
-                item.remove();
-                hitungTotal();
-            }
+    function attachEvents(item) {
+        item.querySelector('.product-select').addEventListener('change', updateTotals);
+        item.querySelector('.jumlah').addEventListener('input', updateTotals);
+        item.querySelector('.btn-remove').addEventListener('click', () => {
+            item.remove();
+            updateTotals();
         });
     }
 
-    initItem(firstItem);
-
-    document.getElementById('add-produk').addEventListener('click', () => {
+    addBtn.addEventListener('click', () => {
+        const firstItem = wrapper.querySelector('.produk-item');
         const clone = firstItem.cloneNode(true);
 
-        clone.classList.add('opacity-0', 'transition', 'duration-300');
         clone.querySelector('.product-select').value = '';
         clone.querySelector('.jumlah').value = 1;
         clone.querySelector('.harga').value = '';
@@ -133,13 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
         clone.querySelector('.btn-remove').classList.remove('hidden');
 
         wrapper.appendChild(clone);
-        initItem(clone);
-        hitungTotal();
-
-        setTimeout(() => clone.classList.remove('opacity-0'), 10);
+        attachEvents(clone);
     });
 
-    hitungTotal();
+    // Pasang event listener awal
+    wrapper.querySelectorAll('.produk-item').forEach(item => attachEvents(item));
+    updateTotals();
 });
 </script>
-@endpush
+@endsection

@@ -1,56 +1,56 @@
 @extends('layouts.app')
-@section('title', 'Setting Password')
+@section('title', 'Ganti Password')
 
 @section('content')
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-md-5">
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-body p-4">
-                <h4 class="text-center mb-4 fw-bold">Ganti Password</h4>
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="w-full max-w-lg bg-white shadow-md rounded-xl p-5">
+        <h2 class="text-2xl font-bold text-center text-blue-600 mb-4">Ganti Password</h2>
 
-                {{-- pesan sukses --}}
-                @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show small" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                {{-- error validasi --}}
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show small" role="alert">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $err)
-                                <li>{{ $err }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                <form action="{{ route('setting.updatePassword') }}" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="mb-3">
-                        <label for="current_password" class="form-label">Password Lama</label>
-                        <input type="password" name="current_password" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="new_password" class="form-label">Password Baru</label>
-                        <input type="password" name="new_password" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="new_password_confirmation" class="form-label">Konfirmasi Password Baru</label>
-                        <input type="password" name="new_password_confirmation" class="form-control" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100">Update Password</button>
-                </form>
+        {{-- Pesan sukses --}}
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-300 text-green-700 px-3 py-2 rounded mb-3 text-sm">
+                {{ session('success') }}
             </div>
-        </div>
+        @endif
+
+        {{-- Error validasi --}}
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-300 text-red-700 px-3 py-2 rounded mb-3 text-sm">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('setting.updatePassword') }}" method="POST" class="space-y-3">
+            @csrf
+            @method('PUT')
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password Lama</label>
+                <input type="password" name="current_password" required
+                       class="w-full border border-gray-300 rounded px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                <input type="password" name="new_password" required
+                       class="w-full border border-gray-300 rounded px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password Baru</label>
+                <input type="password" name="new_password_confirmation" required
+                       class="w-full border border-gray-300 rounded px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 rounded text-sm font-medium hover:bg-blue-700 transition">
+                Update Password
+            </button>
+        </form>
     </div>
 </div>
 @endsection

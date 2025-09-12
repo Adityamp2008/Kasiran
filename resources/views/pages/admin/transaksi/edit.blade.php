@@ -2,108 +2,132 @@
 @section('title', 'Edit Transaksi')
 
 @section('content')
-<div class="max-w-screen-md mx-auto px-3 sm:px-6 py-6">
-  <div class="bg-white p-5 rounded-xl shadow-md border">
-    {{-- Header --}}
-    <h5 class="text-lg font-semibold text-blue-600 mb-4 flex items-center">
-      <i class="fas fa-edit mr-2"></i> Edit Transaksi
-    </h5>
+<div class="max-w-screen-lg mx-auto px-3 sm:px-6 py-6">
+    <div class="bg-white p-5 rounded-xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-edit text-blue-500 mr-2"></i> Edit Transaksi
+        </h2>
 
-    <form action="{{ route('Transaksi.update', $transaksi->id) }}" method="POST" id="form-edit-transaksi" class="space-y-4">
-      @csrf
-      @method('PUT')
+        <form action="{{ route('Transaksi.update', $transaksi->id) }}" method="POST" id="form-edit-transaksi" class="space-y-4">
+            @csrf
+            @method('PUT')
 
-      {{-- Produk --}}
-      <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">Produk</label>
-        <select name="product_id"
-                class="border border-gray-300 rounded-lg text-sm p-2 w-full focus:ring-2 focus:ring-blue-400"
-                required>
-          <option value="" disabled hidden>-- Pilih Produk --</option>
-          @foreach($product as $p)
-            <option value="{{ $p->id }}"
-                    data-harga="{{ $p->harga_jual }}"
-                    {{ $transaksi->product_id == $p->id ? 'selected' : '' }}>
-              {{ $p->supplier->nama_product ?? '-' }}
-            </option>
-          @endforeach
-        </select>
-      </div>
+            {{-- Wrapper produk --}}
+            <div id="produk-wrapper" class="space-y-3">
+                @foreach($transaksi->details as $detail)
+                <div class="produk-item grid grid-cols-1 sm:grid-cols-5 gap-3 bg-gray-50 p-4 rounded-lg border relative">
+                    {{-- Pilih Produk --}}
+                    <select name="product_id[]" class="product-select border rounded-lg text-sm p-2" required>
+                        <option value="">-- Pilih Produk --</option>
+                        @foreach($product as $p)
+                            <option value="{{ $p->id }}" data-harga="{{ $p->harga_jual }}"
+                                {{ $p->id == $detail->product_id ? 'selected' : '' }}>
+                                {{ $p->supplier->nama_product ?? '-' }}
+                            </option>
+                        @endforeach
+                    </select>
 
-      {{-- Jumlah --}}
-      <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">Jumlah</label>
-        <input type="number" name="jumlah" id="jumlah"
-               class="border border-gray-300 rounded-lg text-sm p-2 w-full focus:ring-2 focus:ring-blue-400"
-               value="{{ old('jumlah', $transaksi->jumlah) }}" min="1" required>
-      </div>
+                    {{-- Jumlah --}}
+                    <input type="number" name="jumlah[]" class="jumlah border rounded-lg text-sm p-2" value="{{ $detail->jumlah }}" min="1" required>
 
-      {{-- Harga & Total --}}
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Harga Satuan</label>
-          <input type="text" id="harga"
-                 class="border border-gray-300 rounded-lg text-sm p-2 w-full bg-gray-50 text-gray-700"
-                 value="{{ $transaksi->product->harga_jual ?? 0 }}" readonly>
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Total</label>
-          <input type="text" id="total"
-                 class="border border-gray-300 rounded-lg text-sm p-2 w-full bg-gray-50 text-gray-700 font-semibold"
-                 value="{{ $transaksi->total }}" readonly>
-        </div>
-      </div>
+                    {{-- Harga --}}
+                    <input type="text" class="harga border rounded-lg text-sm p-2 bg-gray-100" value="{{ $detail->harga }}" readonly>
 
-      {{-- Tombol --}}
-      <div class="flex justify-between pt-3">
-        <a href="{{ route('Transaksi.index') }}"
-           class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm flex items-center gap-1">
-          <i class="fas fa-arrow-left"></i> Kembali
-        </a>
-        <button type="submit"
-                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm flex items-center gap-1">
-          <i class="fas fa-save"></i> Update
-        </button>
-      </div>
-    </form>
-  </div>
+                    {{-- Subtotal --}}
+                    <input type="text" class="subtotal border rounded-lg text-sm p-2 bg-gray-100" value="{{ $detail->subtotal }}" readonly>
+
+                    {{-- Tombol hapus --}}
+                    <button type="button" class="btn-remove text-red-600 hover:text-red-800">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                @endforeach
+            </div>
+
+            {{-- Grand Total --}}
+            <div class="text-lg font-semibold text-gray-800">
+                Grand Total: <span id="grand-total" class="text-blue-600">Rp {{ number_format($transaksi->total,0,',','.') }}</span>
+            </div>
+            <input type="hidden" name="grand_total" id="grand_total_input" value="{{ $transaksi->total }}">
+
+            <div class="flex gap-3">
+                <button type="button" id="add-produk" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-plus"></i> Tambah Produk
+                </button>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-save"></i> Update Transaksi
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const productSelect = document.querySelector('select[name="product_id"]');
-  const jumlahInput   = document.getElementById('jumlah');
-  const hargaInput    = document.getElementById('harga');
-  const totalInput    = document.getElementById('total');
+document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.getElementById('produk-wrapper');
+    const addBtn = document.getElementById('add-produk');
+    const grandTotalSpan = document.getElementById('grand-total');
+    const grandTotalInput = document.getElementById('grand_total_input');
 
-  function formatRupiah(angka) {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(angka);
-  }
+    function formatRupiah(angka) {
+        return `Rp ${parseInt(angka).toLocaleString()}`;
+    }
 
-  function hitungTotal() {
-    const jumlah = parseInt(jumlahInput.value || 0);
-    const harga  = parseFloat(hargaInput.dataset.value || hargaInput.value || 0);
-    totalInput.value = formatRupiah(harga * jumlah);
-  }
+    function updateTotals() {
+        let grandTotal = 0;
+        wrapper.querySelectorAll('.produk-item').forEach(item => {
+            const selectProduk = item.querySelector('.product-select');
+            const jumlahInput = item.querySelector('.jumlah');
+            const hargaInput = item.querySelector('.harga');
+            const subtotalInput = item.querySelector('.subtotal');
 
-  productSelect.addEventListener('change', function () {
-    const selected = this.options[this.selectedIndex];
-    const harga = selected.dataset.harga || 0;
-    hargaInput.dataset.value = harga;
-    hargaInput.value = formatRupiah(harga);
-    hitungTotal();
-  });
+            const selectedOption = selectProduk.selectedOptions[0];
+            const harga = selectedOption ? parseInt(selectedOption.dataset.harga) : 0;
+            const qty = parseInt(jumlahInput.value) || 0;
+            const subtotal = harga * qty;
 
-  jumlahInput.addEventListener('input', hitungTotal);
+            hargaInput.value = harga ? formatRupiah(harga) : '';
+            subtotalInput.value = subtotal ? formatRupiah(subtotal) : '';
 
-  // Format awal saat load
-  if (hargaInput.value) {
-    hargaInput.dataset.value = hargaInput.value;
-    hargaInput.value = formatRupiah(hargaInput.value);
-    hitungTotal();
-  }
+            grandTotal += subtotal;
+        });
+
+        grandTotalSpan.textContent = formatRupiah(grandTotal);
+        grandTotalInput.value = grandTotal;
+    }
+
+    function attachEvents(item) {
+        item.querySelector('.product-select').addEventListener('change', updateTotals);
+        item.querySelector('.jumlah').addEventListener('input', updateTotals);
+        item.querySelector('.btn-remove').addEventListener('click', () => {
+            item.remove();
+            updateTotals();
+        });
+    }
+
+    // Attach events ke semua item yang ada
+    wrapper.querySelectorAll('.produk-item').forEach(item => attachEvents(item));
+
+    // Tambah produk baru
+    addBtn.addEventListener('click', () => {
+        const firstItem = wrapper.querySelector('.produk-item');
+        const clone = firstItem.cloneNode(true);
+
+        // reset clone
+        clone.querySelector('.product-select').value = '';
+        clone.querySelector('.jumlah').value = 1;
+        clone.querySelector('.harga').value = '';
+        clone.querySelector('.subtotal').value = '';
+        clone.querySelector('.btn-remove').classList.remove('hidden');
+
+        wrapper.appendChild(clone);
+        attachEvents(clone);
+        updateTotals();
+    });
+
+    updateTotals();
 });
 </script>
-@endpush
+@endsection
